@@ -1,7 +1,7 @@
 from asyncio import sleep
 import subprocess
 import os
-
+import sys
 
 
 def install_chocolatey():
@@ -11,9 +11,11 @@ def install_chocolatey():
         'iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
     )
     subprocess.run(
-        ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", installationScript],
+        ["powershell.exe", "-NoProfile", "-ExecutionPolicy",
+            "Bypass", "-Command", installationScript],
         check=True
     )
+
 
 welcome_message = """
 ===========================================
@@ -25,6 +27,8 @@ menu = """
 1 = Install an app
 2 = Create a profile
 3 = Run a profile
+
+TIP: To come back to this menu at any time, just type "back".
 """
 
 print(welcome_message, menu)
@@ -34,6 +38,9 @@ chooseOption = input("Which option would you like to choose(1/2)?: ")
 if chooseOption == "1":
 
     whichApp = input("Type the name of the app you want to install: ")
+
+    if whichApp.lower() == "back":
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
     print("Installing Chocolatey...")
 
@@ -51,8 +58,12 @@ if chooseOption == "2":
 
     profileName = input("Type the name of the profile you want to create: ")
 
+    if profileName.lower() == "back":
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+
     with open(f"{profileName}.txt", "w") as profileFile:
-        appNames = input("Type the names of the apps you want to add to the profile (separated by commas): ")
+        appNames = input(
+            "Type the names of the apps you want to add to the profile (separated by commas): ")
         for appName in appNames.split(","):
             profileFile.write(appName.strip() + "\n")
 
@@ -60,19 +71,27 @@ if chooseOption == "2":
 
 if chooseOption == "3":
     inputProfileName = input("Type the name of the profile you want to run: ")
-    
+
+    if inputProfileName.lower() == "back":
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+
     if os.path.exists(f"{inputProfileName}.txt"):
         print(f"Installing apps from profile '{inputProfileName}.txt'...")
-        
+
         install_chocolatey()
-        
+
         with open(f"{inputProfileName}.txt", "r") as profileFile:
             for line in profileFile:
                 appName = line.strip()
                 if appName:
                     print(f"Installing {appName}...")
-                    subprocess.run(["choco", "install", appName, "-y"], check=True)
+                    subprocess.run(
+                        ["choco", "install", appName, "-y"], check=True)
 
         print("All apps from the profile have been successfully installed.")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
     else:
         print(f"Profile '{inputProfileName}.txt' does not exist.")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
