@@ -3,19 +3,46 @@ import shutil
 import subprocess
 import os
 import sys
+import ctypes
+import tempfile
 
 
+def _is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin() != 0
+    except Exception:
+        return False
+    
 def install_chocolatey():
     installationScript = (
         'Set-ExecutionPolicy Bypass -Scope Process -Force; '
         '[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; '
         'iex ((New-Object System.Net.WebClient).DownloadString(\'https://community.chocolatey.org/install.ps1\'))'
     )
-    subprocess.run(
-        ["powershell.exe", "-NoProfile", "-ExecutionPolicy",
-            "Bypass", "-Command", installationScript],
-        check=True
-    )
+
+    if _is_admin():
+        subprocess.run(
+            ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", installationScript],
+            check=True
+        )
+        return
+
+    fd, script_path = tempfile.mkstemp(suffix=".ps1", text=True)
+    os.close(fd)
+    with open(script_path, "w", encoding="utf-8") as f:
+        f.write(installationScript)
+
+    ps_cmd = (
+        "Start-Process powershell -Verb RunAs -ArgumentList "
+        "'-NoProfile','-ExecutionPolicy','Bypass','-File','{}' -Wait"
+    ).format(script_path.replace("'", "''"))
+
+    subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps_cmd], check=True)
+
+    try:
+        os.remove(script_path)
+    except OSError:
+        pass
 
 def get_choco_cmd():
     return shutil.which("choco") or r"C:\ProgramData\chocolatey\bin\choco.exe"
