@@ -13,6 +13,12 @@ def _is_admin():
     except Exception:
         return False
     
+if not _is_admin():
+    print("Requesting admin privileges...")
+    params = " ".join([f'"{arg}"' for arg in sys.argv])
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, params, None, 1)
+    sys.exit(0)
+
 def install_chocolatey():
     installationScript = (
         'Set-ExecutionPolicy Bypass -Scope Process -Force; '
@@ -76,7 +82,10 @@ if chooseOption == "1":
 
     sleep(2)
 
-    install_chocolatey()
+    if os.path.exists(get_choco_cmd()):
+        print("Chocolatey is already installed.")
+    else:
+        install_chocolatey()
 
     print(f"Installing {whichApp}...")
 
