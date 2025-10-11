@@ -54,9 +54,11 @@ def get_choco_cmd():
     return shutil.which("choco") or r"C:\ProgramData\chocolatey\bin\choco.exe"
 
 welcome_message = """
-===========================================
-                pynstall
-===========================================
+===================================================
+                     pynstaller
+WARNING: The names of the apps are separated
+like "app1;app2;app3" unless specified otherwise.
+===================================================
 """
 
 menu = """
@@ -69,11 +71,11 @@ TIP: To come back to this menu at any time, just type "back".
 
 print(welcome_message, menu)
 
-chooseOption = input("Which option would you like to choose(1/2)?: ")
+chooseOption = input("Which option would you like to choose(1/2/3)?: ")
 
 if chooseOption == "1":
 
-    whichApp = input("Type the name of the app you want to install: ")
+    whichApp = input("Type the name of the app(s) you want to install: ")
 
     if whichApp.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
@@ -101,7 +103,7 @@ if chooseOption == "2":
     if profileName.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
-    with open(f"{profileName}.txt", "w") as profileFile:
+    with open(f"{profileName}.conf", "w") as profileFile:
         appNames = input(
             "Type the names of the apps you want to add to the profile (separated by commas): ")
         for appName in appNames.split(","):
@@ -115,12 +117,12 @@ if chooseOption == "3":
     if inputProfileName.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
-    if os.path.exists(f"{inputProfileName}.txt"):
-        print(f"Installing apps from profile '{inputProfileName}.txt'...")
+    if os.path.exists(f"{inputProfileName}.conf"):
+        print(f"Installing apps from profile '{inputProfileName}.conf'...")
 
         install_chocolatey()
 
-        with open(f"{inputProfileName}.txt", "r") as profileFile:
+        with open(f"{inputProfileName}.conf", "r") as profileFile:
             for line in profileFile:
                 appName = line.strip()
                 if appName:
@@ -132,6 +134,6 @@ if chooseOption == "3":
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
     else:
-        print(f"Profile '{inputProfileName}.txt' does not exist.")
+        print(f"Profile '{inputProfileName}.conf' does not exist.")
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
