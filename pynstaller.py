@@ -109,7 +109,7 @@ if chooseOption == "2":
         for appName in appNames.split(","):
             profileFile.write(appName.strip() + "\n")
 
-    print(f"Your profile '{profileName}.txt' has been created successfully.")
+    print(f"Your profile '{profileName}.conf' has been created successfully.")
 
 if chooseOption == "3":
     inputProfileName = input("Type the name of the profile you want to run: ")
@@ -118,9 +118,22 @@ if chooseOption == "3":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
     if os.path.exists(f"{inputProfileName}.conf"):
+        print("Checking if Chocolatey is installed...")
+        
+        sleep(2)
+
+        if os.path.exists(get_choco_cmd()):
+            print("Chocolatey is already installed.")
+        else:
+            print("Chocolatey is not installed. Installing Chocolatey...")
+
+            sleep(2)
+
+            install_chocolatey()
+
         print(f"Installing apps from profile '{inputProfileName}.conf'...")
 
-        install_chocolatey()
+        sleep(2)
 
         with open(f"{inputProfileName}.conf", "r") as profileFile:
             for line in profileFile:
