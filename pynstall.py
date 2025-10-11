@@ -1,4 +1,5 @@
-from asyncio import sleep
+from time import sleep
+import shutil
 import subprocess
 import os
 import sys
@@ -16,6 +17,8 @@ def install_chocolatey():
         check=True
     )
 
+def get_choco_cmd():
+    return shutil.which("choco") or r"C:\ProgramData\chocolatey\bin\choco.exe"
 
 welcome_message = """
 ===========================================
@@ -52,7 +55,8 @@ if chooseOption == "1":
 
     sleep(2)
 
-    subprocess.run(["choco", "install", whichApp, "-y"], check=True)
+    choco = get_choco_cmd()
+    subprocess.run([choco, "install", whichApp, "-y"], check=True)
 
 if chooseOption == "2":
 
