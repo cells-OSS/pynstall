@@ -96,7 +96,11 @@ if os.path.exists("auto_update.conf"):
                     print("New version available!")
                     download_latest_script()
 
-welcome_message = """
+if os.path.exists("welcome_message.conf"):
+    with open("welcome_message.conf", "r", encoding="utf-8") as f:
+        welcome_message = f.read()
+else:
+    welcome_message = """
 ===================================================
                      pynstaller
 WARNING: The names of the apps are separated
@@ -200,7 +204,7 @@ if chooseOption == "4":
 ===================================================
                      Settings
     1 = Turn Auto Update On/Off
-    2 = Change Welcome Message(Coming Soon)
+    2 = Change Welcome Message
     3 = Reset Welcome Message(Coming Soon)
     4 = Figlet Welcome Message(Coming Soon)
 ===================================================
@@ -248,9 +252,20 @@ if chooseOption == "4":
                 input("Press Enter to continue...")
                 os.execv(sys.executable, [sys.executable] + sys.argv)
     if settingOption == "2":
-        print("This feature is coming soon!")
+        welcome_messageMenu = """
+============================================
+        Change Welcome Message
+============================================            
+"""
+        print(welcome_messageMenu)
+        new_welcome_message = input(
+            "New welcome message(use \\n for new lines): ")
+        with open("welcome_message.conf", "w", encoding="utf-8") as f:
+            f.write(new_welcome_message.replace("\\n", "\n"))
+        print("Welcome message updated.")
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
+
     if settingOption == "3":
         print("This feature is coming soon!")
         input("Press Enter to continue...")
