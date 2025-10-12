@@ -8,7 +8,7 @@ import tempfile
 import requests
 from packaging import version
 
-__version__ = "v1.1"
+__version__ = "v1.2"
 
 
 def get_latest_release_tag():
