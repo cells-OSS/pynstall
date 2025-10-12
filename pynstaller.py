@@ -202,12 +202,13 @@ if chooseOption == "4":
     1 = Turn Auto Update On/Off
     2 = Change Welcome Message(Coming Soon)
     3 = Reset Welcome Message(Coming Soon)
+    4 = Figlet Welcome Message(Coming Soon)
 ===================================================
     """
 
     print(settings_menu)
 
-    settingOption = input("Which setting would you like to change(1)?: ")
+    settingOption = input("Which setting would you like to change(1/2/3/4)?: ")
     if settingOption.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
     
@@ -246,3 +247,19 @@ if chooseOption == "4":
                 print("Auto Updates are already disabled.")
                 input("Press Enter to continue...")
                 os.execv(sys.executable, [sys.executable] + sys.argv)
+    if settingOption == "2":
+        print("This feature is coming soon!")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    if settingOption == "3":
+        print("This feature is coming soon!")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    if settingOption == "4":
+        print("This feature is coming soon!")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    else:
+        print("Invalid choice.")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
