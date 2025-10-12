@@ -5,7 +5,45 @@ import os
 import sys
 import ctypes
 import tempfile
+import requests
+from packaging import version
 
+__version__ = "v1.1"
+
+
+def get_latest_release_tag():
+    try:
+        url = "https://api.github.com/repos/cells-OSS/pynstaller/releases/latest"
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        return data["tag_name"].lstrip("v")
+    except Exception as e:
+        print("Failed to check for updates:", e)
+        return __version__.lstrip("v")
+
+
+def is_update_available(current_version):
+    latest = get_latest_release_tag()
+    return version.parse(latest) > version.parse(current_version.lstrip("v"))
+
+
+def download_latest_script():
+    latest_version = get_latest_release_tag()
+    filename = f"pynstaller-v{latest_version}.py"
+    url = "https://raw.githubusercontent.com/cells-OSS/pynstaller/main/pynstaller.py"
+    response = requests.get(url)
+    lines = response.text.splitlines()
+    with open(filename, "w", encoding="utf-8") as f:
+        for line in lines:
+            f.write(line.rstrip() + "\n")
+    print(
+        f"Current version: {__version__}, Latest: v{get_latest_release_tag()}")
+    print(
+        f"Downloaded update as '{filename}'. You can now safely delete the old version.")
+
+    input("Press Enter to exit...")
+    exit()
 
 def _is_admin():
     try:
@@ -53,6 +91,11 @@ def install_chocolatey():
 def get_choco_cmd():
     return shutil.which("choco") or r"C:\ProgramData\chocolatey\bin\choco.exe"
 
+if os.path.exists("auto_update.conf"):
+                if is_update_available(__version__):
+                    print("New version available!")
+                    download_latest_script()
+
 welcome_message = """
 ===================================================
                      pynstaller
@@ -65,6 +108,7 @@ menu = """
 1 = Install an app
 2 = Create a profile
 3 = Run a profile
+4 = Settings
 
 TIP: To come back to this menu at any time, just type "back".
 """
@@ -150,3 +194,55 @@ if chooseOption == "3":
         print(f"Profile '{inputProfileName}.conf' does not exist.")
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
+
+if chooseOption == "4":
+    settings_menu = """
+===================================================
+                     Settings
+    1 = Turn Auto Update On/Off
+    2 = Change Welcome Message(Coming Soon)
+    3 = Reset Welcome Message(Coming Soon)
+===================================================
+    """
+
+    print(settings_menu)
+
+    settingOption = input("Which setting would you like to change(1)?: ")
+    if settingOption.lower() == "back":
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    
+    if settingOption == "1":
+        autoUpdateMenu = """
+===================================================
+                     Auto Update
+    1 = Enable Auto Updates
+    2 = Disable Auto Updates
+===================================================
+    """
+
+        print(autoUpdateMenu)
+
+        autoUpdateOption = input("Which option would you like to choose(1/2)?: ")
+
+        if autoUpdateOption.lower() == "back":
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+
+        if autoUpdateOption == "1":
+            print("Enabling Auto Updates...")
+            with open("auto_update.conf", "wb") as autoUpdateFile:
+                autoUpdateFile.write("True".encode())
+            print("Auto Updates have been enabled successfully!")
+            input("Press Enter to continue...")
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+        
+        if autoUpdateOption == "2":
+            print("Disabling Auto Updates...")
+            if os.path.exists("auto_update.conf"):
+                os.remove("auto_update.conf")
+                print("Auto Updates have been disabled successfully!")
+                input("Press Enter to continue...")
+                os.execv(sys.executable, [sys.executable] + sys.argv)
+            else:
+                print("Auto Updates are already disabled.")
+                input("Press Enter to continue...")
+                os.execv(sys.executable, [sys.executable] + sys.argv)
