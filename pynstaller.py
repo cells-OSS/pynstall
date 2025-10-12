@@ -206,7 +206,7 @@ if chooseOption == "4":
     1 = Turn Auto Update On/Off
     2 = Change Welcome Message
     3 = Reset Welcome Message
-    4 = Figlet Welcome Message(Coming Soon)
+    4 = Figlet Welcome Message
 ===================================================
     """
 
@@ -267,19 +267,6 @@ if chooseOption == "4":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
     if settingOption == "3":
-        print("This feature is coming soon!")
-        input("Press Enter to continue...")
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-    if settingOption == "4":
-        print("This feature is coming soon!")
-        input("Press Enter to continue...")
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-    else:
-        print("Invalid choice.")
-        input("Press Enter to continue...")
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-
-    if settingOption == "3":
         if os.path.exists("welcome_message.conf"):
             os.remove("welcome_message.conf")
             print("Welcome message has been reset to default.")
@@ -289,6 +276,15 @@ if chooseOption == "4":
             print("Welcome message is already the default.")
             input("Press Enter to continue...")
             os.execv(sys.executable, [sys.executable] + sys.argv)
+
+    if settingOption == "4":
+        print("This feature is coming soon!")
+        input("Press Enter to continue...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    else:
+        print("Invalid choice.")
+        input("Press Enter to continue...")
+
 
 else:
     print("Invalid choice.")
