@@ -99,15 +99,21 @@ if os.path.exists("auto_update.conf"):
 
 if os.path.exists("welcome_message.conf"):
     with open("welcome_message.conf", "r", encoding="utf-8") as f:
-        welcome_message = f.read()
+        welcomeMessage = f.read()
 else:
-    welcome_message = """
+    welcomeMessage = """
 ===================================================
                      pynstaller
 WARNING: The names of the apps are separated
 like "app1;app2;app3" unless specified otherwise.
 ===================================================
 """
+
+if os.path.exists("figlet.conf"):
+    with open("figlet.conf", "rb") as figlet_configFile:
+        figlet_config = figlet_configFile.read().decode()
+        if figlet_config == "True":
+            welcomeMessage = pyfiglet.figlet_format(welcomeMessage)
 
 menu = """
 1 = Install an app
@@ -118,7 +124,7 @@ menu = """
 TIP: To come back to this menu at any time, just type "back".
 """
 
-print(welcome_message, menu)
+print(welcomeMessage, menu)
 
 chooseOption = input("Which option would you like to choose(1/2/3)?: ")
 
