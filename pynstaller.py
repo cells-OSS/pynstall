@@ -263,3 +263,8 @@ if chooseOption == "4":
         print("Invalid choice.")
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
+
+else:
+    print("Invalid choice.")
+    input("Press Enter to continue...")
+    os.execv(sys.executable, [sys.executable] + sys.argv)
