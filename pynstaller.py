@@ -7,6 +7,7 @@ import ctypes
 import tempfile
 import requests
 from packaging import version
+import pyfiglet
 
 __version__ = "v1.2"
 
@@ -278,9 +279,38 @@ if chooseOption == "4":
             os.execv(sys.executable, [sys.executable] + sys.argv)
 
     if settingOption == "4":
-        print("This feature is coming soon!")
-        input("Press Enter to continue...")
-        os.execv(sys.executable, [sys.executable] + sys.argv)
+        figletWelcome = """
+============================================
+        Figlet Welcome Message
+1 = Turn on Figlet Welcome Message
+2 = Turn off Figlet Welcome Message
+============================================
+"""
+        print(figletWelcome)
+        figletOption = input("Which option would you like to choose(1/2)?: ")
+        if figletOption.lower() == "back":
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+
+        if figletOption == "1":
+            print("Enabling Figlet Welcome Message...")
+            with open("figlet.conf", "w", encoding="utf-8") as f:
+                f.write("True")
+            print("Figlet Welcome Message has been enabled successfully!")
+            input("Press Enter to continue...")
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+    
+        if figletOption == "2":
+            print("Disabling Figlet Welcome Message...")
+            if os.path.exists("figlet.conf"):
+                os.remove("figlet.conf")
+                print("Figlet Welcome Message has been disabled successfully!")
+                input("Press Enter to continue...")
+                os.execv(sys.executable, [sys.executable] + sys.argv)
+            else:
+                print("Figlet Welcome Message is already disabled.")
+                input("Press Enter to continue...")
+                os.execv(sys.executable, [sys.executable] + sys.argv)
+
     else:
         print("Invalid choice.")
         input("Press Enter to continue...")
