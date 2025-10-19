@@ -255,24 +255,27 @@ if chooseOption == "4":
             os.execv(sys.executable, [sys.executable] + sys.argv)
 
         if autoUpdateOption == "1":
+            config_path = os.path.join(config_dir, "auto_update.conf")
             print("Enabling Auto Updates...")
-            with open("auto_update.conf", "wb") as autoUpdateFile:
+            with open(config_path, "wb") as autoUpdateFile:
                 autoUpdateFile.write("True".encode())
             print("Auto Updates have been enabled successfully!")
             input("Press Enter to continue...")
             os.execv(sys.executable, [sys.executable] + sys.argv)
         
         if autoUpdateOption == "2":
+            config_path = os.path.join(config_dir, "auto_update.conf")
             print("Disabling Auto Updates...")
-            if os.path.exists("auto_update.conf"):
-                os.remove("auto_update.conf")
-                print("Auto Updates have been disabled successfully!")
+            if os.path.exists(config_path):
+                os.remove(config_path)
+                print("Auto-Updates have been disabled successfully!")
                 input("Press Enter to continue...")
                 os.execv(sys.executable, [sys.executable] + sys.argv)
             else:
-                print("Auto Updates are already disabled.")
+                print("Auto-Updates are already disabled.")
                 input("Press Enter to continue...")
                 os.execv(sys.executable, [sys.executable] + sys.argv)
+                
     if settingOption == "2":
         welcome_messageMenu = """
 ============================================
