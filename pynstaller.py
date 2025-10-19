@@ -275,7 +275,7 @@ if chooseOption == "4":
                 print("Auto-Updates are already disabled.")
                 input("Press Enter to continue...")
                 os.execv(sys.executable, [sys.executable] + sys.argv)
-                
+
     if settingOption == "2":
         welcome_messageMenu = """
 ============================================
@@ -283,17 +283,21 @@ if chooseOption == "4":
 ============================================            
 """
         print(welcome_messageMenu)
+        config_path = os.path.join(config_dir, "welcome_message.conf")
+
         new_welcome_message = input(
             "New welcome message(use \\n for new lines): ")
-        with open("welcome_message.conf", "w", encoding="utf-8") as f:
+        with open(config_path, "w", encoding="utf-8") as f:
             f.write(new_welcome_message.replace("\\n", "\n"))
         print("Welcome message updated.")
         input("Press Enter to continue...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
     if settingOption == "3":
-        if os.path.exists("welcome_message.conf"):
-            os.remove("welcome_message.conf")
+        config_path = os.path.join(config_dir, "welcome_message.conf")
+
+        if os.path.exists(config_path):
+            os.remove(config_path)
             print("Welcome message has been reset to default.")
             input("Press Enter to continue...")
             os.execv(sys.executable, [sys.executable] + sys.argv)
