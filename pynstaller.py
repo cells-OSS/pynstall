@@ -101,13 +101,13 @@ figlet_config_path = os.path.join(config_dir, "figlet.conf")
 auto_update_config_path = os.path.join(config_dir, "auto_update.conf")
 profile_path = os.path.join(config_dir)
 
-if os.path.exists("auto_update.conf"):
-                if is_update_available(__version__):
-                    print("New version available!")
-                    download_latest_script()
+if os.path.exists(auto_update_config_path):
+    if is_update_available(__version__):
+        print("New version available!")
+        download_latest_script()
 
-if os.path.exists("welcome_message.conf"):
-    with open("welcome_message.conf", "r", encoding="utf-8") as f:
+if os.path.exists(welcomeMessage_config_path):
+    with open(welcomeMessage_config_path, "r", encoding="utf-8") as f:
         welcomeMessage = f.read()
 else:
     welcomeMessage = """
@@ -116,7 +116,7 @@ else:
 ===================================================
 """
 
-if os.path.exists("figlet.conf"):
+if os.path.exists(figlet_config_path):
     with open("figlet.conf", "rb") as figlet_configFile:
         figlet_config = figlet_configFile.read().decode()
         if figlet_config == "True":
