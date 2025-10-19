@@ -99,6 +99,7 @@ os.makedirs(config_dir, exist_ok=True)
 welcomeMessage_config_path = os.path.join(config_dir, "welcome_message.conf")
 figlet_config_path = os.path.join(config_dir, "figlet.conf")
 auto_update_config_path = os.path.join(config_dir, "auto_update.conf")
+profile_path = os.path.join(config_dir)
 
 if os.path.exists("auto_update.conf"):
                 if is_update_available(__version__):
@@ -164,24 +165,29 @@ if chooseOption == "2":
 
     profileName = input("Type the name of the profile you want to create: ")
 
+    config_path = os.path.join(config_dir, profileName)
+
     if profileName.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
-    with open(f"{profileName}.conf", "w") as profileFile:
+
+    with open(f"{config_path}.conf", "w") as profileFile:
         appNames = input(
             "Type the names of the apps you want to add to the profile (separated by commas): ")
         for appName in appNames.split(","):
             profileFile.write(appName.strip() + "\n")
 
-    print(f"Your profile '{profileName}.conf' has been created successfully.")
+    print(f"Your profile '{profileName}.conf' has been created successfully at '%appdata%/pynstaller'.")
 
 if chooseOption == "3":
+    print("Please place the profile config file at '%appdata%/pynstaller'.")
     inputProfileName = input("Type the name of the profile you want to run: ")
+    config_path = os.path.join(config_dir, inputProfileName)
 
     if inputProfileName.lower() == "back":
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
-    if os.path.exists(f"{inputProfileName}.conf"):
+    if os.path.exists(f"{config_path}.conf"):
         print("Checking if Chocolatey is installed...")
         
         sleep(2)
@@ -199,7 +205,7 @@ if chooseOption == "3":
 
         sleep(2)
 
-        with open(f"{inputProfileName}.conf", "r") as profileFile:
+        with open(f"{config_path}.conf", "r") as profileFile:
             for line in profileFile:
                 appName = line.strip()
                 if appName:
