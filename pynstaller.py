@@ -92,6 +92,14 @@ def install_chocolatey():
 def get_choco_cmd():
     return shutil.which("choco") or r"C:\ProgramData\chocolatey\bin\choco.exe"
 
+config_dir = os.path.join(os.getenv("APPDATA"), "pynstaller")
+
+os.makedirs(config_dir, exist_ok=True)
+
+welcomeMessage_config_path = os.path.join(config_dir, "welcome_message.conf")
+figlet_config_path = os.path.join(config_dir, "figlet.conf")
+auto_update_config_path = os.path.join(config_dir, "auto_update.conf")
+
 if os.path.exists("auto_update.conf"):
                 if is_update_available(__version__):
                     print("New version available!")
@@ -104,8 +112,6 @@ else:
     welcomeMessage = """
 ===================================================
                      pynstaller
-WARNING: The names of the apps are separated
-like "app1;app2;app3" unless specified otherwise.
 ===================================================
 """
 
@@ -120,6 +126,9 @@ menu = """
 2 = Create a profile
 3 = Run a profile
 4 = Settings
+
+WARNING: The names of the apps are separated
+like "app1;app2;app3" unless specified otherwise.
 
 TIP: To come back to this menu at any time, just type "back".
 """
