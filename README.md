@@ -7,3 +7,5 @@ A simple CLI script that aims at making installation of apps simpler. Written in
 [pyfiglet](https://pypi.org/project/pyfiglet/)
 
 [requests](https://pypi.org/project/requests/)
+
+[packaging](https://pypi.org/project/packaging/)
