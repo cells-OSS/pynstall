@@ -122,7 +122,7 @@ else:
 """
 
 if os.path.exists(figlet_config_path):
-    with open("figlet.conf", "rb") as figlet_configFile:
+    with open(figlet_config_path, "rb") as figlet_configFile:
         figlet_config = figlet_configFile.read().decode()
         if figlet_config == "True":
             welcomeMessage = pyfiglet.figlet_format(welcomeMessage)
