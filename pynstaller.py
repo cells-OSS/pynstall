@@ -96,9 +96,9 @@ config_dir = os.path.join(os.getenv("APPDATA"), "pynstaller")
 
 os.makedirs(config_dir, exist_ok=True)
 
-programming_profile_path = os.path.join(config_dir)
+programming_profile_path = os.path.join(config_dir, "profile_programming.conf")
 
-with open(programming_profile_path, "profile_programming.conf") as f:
+with open(programming_profile_path,) as f:
     f.write(f"librewolf \n vscode \n python3 \n vscode-python \n")
 
 welcomeMessage_config_path = os.path.join(config_dir, "welcome_message.conf")
