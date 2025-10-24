@@ -99,7 +99,8 @@ os.makedirs(config_dir, exist_ok=True)
 programming_profile_path = os.path.join(config_dir, "profile_programming.conf")
 
 with open(programming_profile_path, "w", encoding="utf-8") as f:
-    f.write("\n".join(["librewolf", "vscode", "python3", "vscode-python"]))
+    for name in ["librewolf", "vscode", "python3", "vscode-python"]:
+        f.write(name + "\n")
 
 welcomeMessage_config_path = os.path.join(config_dir, "welcome_message.conf")
 figlet_config_path = os.path.join(config_dir, "figlet.conf")
